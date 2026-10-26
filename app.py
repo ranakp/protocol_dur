@@ -18,7 +18,7 @@ trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (secon
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=30, step=5)
 rest_between_blocks = st.sidebar.slider("Rest Between Major Blocks / Conditions (minutes)", min_value=1, max_value=5, value=2, step=1)
 
-calibration_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=20, step=5)
+calibration_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=15, step=5)
 total_calibration_time = calibration_time * muscles_num
 Biodexsetup_time = (positions + velocities) * 2
 
@@ -63,7 +63,7 @@ st.metric(label="Experiment Duration Per Session", value=f"{total_experiment_tim
 st.metric(label="Total Number of Stimulations Administered Per Session", value=f"{total_trials_persesh:.0f}") 
 
 # Data for the interactive breakdown chart
-labels = ['Prep Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)', 'Biodex Setup']
+labels = ['Calibration Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)', 'Biodex Setup']
 values = [total_calibration_time, active_mins, trial_rest_mins, block_rest_mins, Biodexsetup_time]
 
 # Filter out zero values to keep the chart clean

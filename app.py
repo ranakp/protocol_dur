@@ -43,7 +43,6 @@ total_active_seconds = total_trials * trial_duration
 total_block_count = muscles_num * total_condition_states * reps
 
 # Inter-trial rest occurs between individual stimulations within the sequences
-# Total individual trials minus the number of block beginnings = total internal rep breaks
 total_rep_breaks_all = total_trials - total_block_count
 total_trial_rest_seconds = total_rep_breaks_all * rest_between_trials
 
@@ -51,7 +50,7 @@ total_trial_rest_seconds = total_rep_breaks_all * rest_between_trials
 total_major_block_transitions = total_block_count - 1 if total_block_count > 1 else 0
 total_block_rest_minutes = total_major_block_transitions * rest_between_blocks
 
-# Convert everything to minutes
+# Convert everything to minutes (Total across entire study)
 active_mins = total_active_seconds / 60
 trial_rest_mins = total_trial_rest_seconds / 60
 block_rest_mins = total_block_rest_minutes
@@ -59,9 +58,14 @@ block_rest_mins = total_block_rest_minutes
 total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins
 total_experiment_time_persesh = total_experiment_time / number_of_sessions
 
-# Display Metrics
-st.subheader("⏱️ Total Estimated Time")
-st.metric(label="Experiment Duration Per Session", value=f"{total_experiment_time_persesh:.1f} minutes")
+# --- Display Metrics Above Chart ---
+st.subheader("⏱️ Estimated Time & Stimulations")
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(label="Duration Per Session", value=f"{total_experiment_time_persesh:.1f} mins")
+with col2:
+    st.metric(label="Total Study Duration", value=f"{total_experiment_time:.1f} mins")
+
 st.metric(label="Total Number of Stimulations Administered Per Session", value=f"{total_trials_persesh:.0f}") 
 
 # Block Breakdown Explanations
@@ -69,12 +73,18 @@ st.subheader("📋 Experimental Block Hierarchy")
 st.markdown(f"""
 * **Joint/Condition Blocks:** **{total_condition_states}** total joint configurations ({positions} isometric positions + {active_velocities} active isokinetic velocities).
 * **Williams Design Sequences:** **{stim_levels}** stimulation intensities randomized per sequence, repeated for **{reps}** complete block sets.
-* **Total Major Blocks:** **{total_block_count}** total major blocks across the session, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
+* **Total Major Blocks:** **{total_block_count}** total major blocks across the study, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
 """)
 
-# Data for the interactive breakdown chart
+# --- Per-Session Data for the Interactive Breakdown Chart ---
 labels = ['Calibration Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)']
-values = [total_calibration_time, active_mins, trial_rest_mins, block_rest_mins]
+# Divide by number_of_sessions so the pie chart accurately reflects per-session time blocks
+values = [
+    total_calibration_time / number_of_sessions, 
+    active_mins / number_of_sessions, 
+    trial_rest_mins / number_of_sessions, 
+    block_rest_mins / number_of_sessions
+]
 
 # Filter out zero values to keep the chart clean
 filtered_labels = [l for l, v in zip(labels, values) if v > 0]
@@ -90,7 +100,7 @@ fig = go.Figure(data=[go.Pie(
 )])
 
 fig.update_layout(
-    title_text="Time Allocation Breakdown (Minutes)",
+    title_text="Per-Session Time Allocation Breakdown (Minutes)",
     annotations=[dict(text='Mins', x=0.5, y=0.5, font_size=20, showarrow=False)],
     showlegend=True
 )

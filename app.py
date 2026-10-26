@@ -15,11 +15,12 @@ velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_valu
 
 reps = st.sidebar.slider("Repetitions (per stimulation intensity)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (seconds)", min_value=1, max_value=10, value=3, step=1)
-rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
-#rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
+rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=30, step=5)
+rest_between_blocks = st.sidebar.slider("Rest Between Major Blocks / Conditions (minutes)", min_value=1, max_value=5, value=2, step=1)
+
 calibration_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=20, step=5)
-total_calibration_time = calibration_time*muscles_num;
-Biodexsetup_time = (positions + velocities)*2;
+total_calibration_time = calibration_time * muscles_num
+Biodexsetup_time = (positions + velocities) * 2
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:
@@ -28,41 +29,46 @@ else:
     number_of_sessions = 1
     st.sidebar.info("Number of test sessions fixed to 1 because only 1 muscle is selected.")
 
-
 # Timeline Calculations
-total_trials = muscles_num * stim_levels * reps * ( positions + velocities)
-total_trials_persesh = total_trials/number_of_sessions;
+# Total independent condition states (positions + velocities evaluated independently)
+active_velocities = velocities if velocities > 0 else 0
+total_condition_states = positions + active_velocities
+
+# Total trials: Muscles x Joint States x Williams Stim Levels x Reps per stim
+total_trials = muscles_num * total_condition_states * stim_levels * reps
+total_trials_persesh = total_trials / number_of_sessions
 
 # Total trial active time (seconds)
 total_active_seconds = total_trials * trial_duration
 
-# Total rest between trials (seconds)
-# Within a condition, rest occurs between reps. Total breaks = stim_levels * (reps - 1)
-#total_trial_breaks = stim_levels * (reps - 1) if reps > 1 else 0
-#total_trial_rest_seconds = total_trial_breaks * rest_between_trials
+# Total rep-to-rep rest (within the same stimulation block)
+# Inside each stim block, there are (reps - 1) rest breaks.
+total_reps_per_condition_block = stim_levels * reps
+total_rep_breaks_per_block = stim_levels * (reps - 1) if reps > 1 else 0
+total_block_count = muscles_num * total_condition_states * stim_levels
+total_rep_breaks_all = total_block_count * (reps - 1) if reps > 1 else 0
+total_trial_rest_seconds = total_rep_breaks_all * rest_between_trials
 
-# Total rest between stim_levels (minutes)
-total_condition_breaks = stim_levels - 1 if stim_levels > 1 else 0
-#total_condition_rest_minutes = total_condition_breaks * rest_between_stim_levels
+# Total major block/condition transitions requiring longer rest (minutes)
+total_major_block_transitions = total_block_count - 1 if total_block_count > 1 else 0
+total_block_rest_minutes = total_major_block_transitions * rest_between_blocks
 
 # Convert everything to minutes
 active_mins = total_active_seconds / 60
 trial_rest_mins = total_trial_rest_seconds / 60
-#condition_rest_mins = total_condition_rest_minutes
-#total_experiment_time = calibration_time + active_mins + trial_rest_mins + condition_rest_mins
-total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + Biodexsetup_time;
-total_experiment_time_persesh = total_experiment_time /number_of_sessions;
+block_rest_mins = total_block_rest_minutes
+
+total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins + Biodexsetup_time
+total_experiment_time_persesh = total_experiment_time / number_of_sessions
 
 # Display Metrics
 st.subheader("⏱️ Total Estimated Time")
-st.metric(label="Experiment Duration Per Session", value=f"{total_experiment_time_persesh :.1f} minutes")
-st.metric(label="Total Number of Stimulations Administered Per Session", value = f"{total_trials_persesh:.0f}") 
+st.metric(label="Experiment Duration Per Session", value=f"{total_experiment_time_persesh:.1f} minutes")
+st.metric(label="Total Number of Stimulations Administered Per Session", value=f"{total_trials_persesh:.0f}") 
 
 # Data for the interactive breakdown chart
-labels = ['Prep Time', 'Active Trial Time', 'Rest Between Trials']
-#values = [calibration_time, active_mins, trial_rest_mins, condition_rest_mins]
-values = [calibration_time, active_mins, trial_rest_mins]
-
+labels = ['Prep Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)', 'Biodex Setup']
+values = [total_calibration_time, active_mins, trial_rest_mins, block_rest_mins, Biodexsetup_time]
 
 # Filter out zero values to keep the chart clean
 filtered_labels = [l for l, v in zip(labels, values) if v > 0]

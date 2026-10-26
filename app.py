@@ -18,9 +18,9 @@ trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (secon
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=30, step=5)
 rest_between_blocks = st.sidebar.slider("Rest Between Major Blocks / Conditions (minutes)", min_value=1, max_value=5, value=2, step=1)
 
-calibration_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=15, step=5)
+calibration_time = st.sidebar.slider("Calibration Time (per muscle, minutes)", min_value=0, max_value=45, value=15, step=5)
 total_calibration_time = calibration_time * muscles_num
-Biodexsetup_time = (positions + velocities) * 2
+#Biodexsetup_time = (positions + velocities) * 1
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:
@@ -41,7 +41,9 @@ total_trials_persesh = total_trials / number_of_sessions
 total_active_seconds = total_trials * trial_duration
 
 # Total rep-to-rep rest (within the same stimulation block)
-total_block_count = muscles_num * total_condition_states * stim_levels
+#total_block_count = muscles_num * total_condition_states * stim_levels
+# Total major blocks = Muscles x Joint States x Reps (each rep acts as a full Williams sequence block)
+total_block_count = muscles_num * total_condition_states * reps
 total_rep_breaks_all = total_block_count * (reps - 1) if reps > 1 else 0
 total_trial_rest_seconds = total_rep_breaks_all * rest_between_trials
 
@@ -54,7 +56,9 @@ active_mins = total_active_seconds / 60
 trial_rest_mins = total_trial_rest_seconds / 60
 block_rest_mins = total_block_rest_minutes
 
-total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins + Biodexsetup_time
+#total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins + Biodexsetup_time
+total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins 
+
 total_experiment_time_persesh = total_experiment_time / number_of_sessions
 
 # Display Metrics
@@ -71,8 +75,8 @@ st.markdown(f"""
 """)
 
 # Data for the interactive breakdown chart
-labels = ['Calibration Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)', 'Biodex Setup']
-values = [total_calibration_time, active_mins, trial_rest_mins, block_rest_mins, Biodexsetup_time]
+labels = ['Calibration Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)']
+values = [total_calibration_time, active_mins, trial_rest_mins, block_rest_mins]
 
 # Filter out zero values to keep the chart clean
 filtered_labels = [l for l, v in zip(labels, values) if v > 0]
@@ -99,5 +103,5 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 st.markdown(
     "💡 **Note on Calibration Time:** This represents the time required to establish "
-    "the participant's simulation levels that elicit the target levels of torque."
+    "the participant's simulation levels that elicit the target levels of torque. Biodex set-up time was assumed to be accounted for in the rest times."
 )

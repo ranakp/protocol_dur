@@ -24,7 +24,7 @@ Biodexsetup_time = (positions + velocities) * 2
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:
-    number_of_sessions = st.sidebar.slider("Number of test sessions", min_value=1, max_value=2, value=2, step=1)
+    number_of_sessions = st.sidebar.slider("Number of test sessions", min_value=1, max_value=3, value=2, step=1)
 else:
     number_of_sessions = 1
     st.sidebar.info("Number of test sessions fixed to 1 because only 1 muscle is selected.")

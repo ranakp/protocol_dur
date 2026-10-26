@@ -16,8 +16,6 @@ velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_valu
 reps = st.sidebar.slider("Repetitions / Williams Sequences (per condition)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (seconds)", min_value=1, max_value=10, value=3, step=1)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=20, step=5)
-
-# Updated rest between blocks slider with optimized default and finer increments
 rest_between_blocks = st.sidebar.slider("Rest Between Major Blocks / Conditions (minutes)", min_value=0.5, max_value=5.0, value=1.0, step=0.5)
 
 calibration_time = st.sidebar.slider("Calibration Time (per muscle, minutes)", min_value=0, max_value=45, value=15, step=5)
@@ -85,13 +83,11 @@ st.subheader("📋 Experimental Block Hierarchy")
 st.markdown(f"""
 * **Joint/Condition Blocks:** **{total_condition_states}** total joint configurations ({positions} isometric positions + {active_velocities} active isokinetic velocities).
 * **Williams Design Sequences:** **{stim_levels}** stimulation intensities randomized per sequence, repeated for **{reps}** complete block sets.
-* **Number of Blocks in a Session:** **{total_block_count_persesh:.1f}** ( **Total** block count is a product of: number of muscles (**{muscles_num}**), repetitions (**{reps}**), and
-joint state configurations (**{positions}** isometric positions + **{velocities}** isokinetic) ) total major blocks across the session, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
+* **Number of Blocks in a Session:** **{total_block_count_persesh:.1f}** total major blocks across the session, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
 """)
 
 # --- Per-Session Data for the Interactive Breakdown Chart ---
 labels = ['Calibration Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)']
-# Divide by number_of_sessions so the pie chart accurately reflects per-session time blocks
 values = [
     total_calibration_time / number_of_sessions, 
     active_mins / number_of_sessions, 
@@ -99,31 +95,4 @@ values = [
     block_rest_mins / number_of_sessions
 ]
 
-# Filter out zero values to keep the chart clean
-filtered_labels = [l for l, v in zip(labels, values) if v > 0]
-filtered_values = [v for v in values if v > 0]
-
-# Build Plotly Chart with reduced decimal display using texttemplate
-fig = go.Figure(data=[go.Pie(
-    labels=filtered_labels,
-    values=filtered_values,
-    hole=.4,
-    texttemplate="%{value:.0f}m<br>%{percent}",
-    hovertemplate="%{label}: %{value:.1f} mins<extra></extra>"
-)])
-
-fig.update_layout(
-    title_text="Per-Session Time Allocation Breakdown (Minutes)",
-    annotations=[dict(text='Mins', x=0.5, y=0.5, font_size=20, showarrow=False)],
-    showlegend=True,
-    margin=dict(t=40, b=10, l=10, r=10)  # Minimized padding/whitespace under chart
-)
-
-st.plotly_chart(fig, use_container_width=True)
-
-# Explanation Note Under Pie Chart (Pulled closer up)
-st.markdown(
-    "💡 **Note on Calibration Time:** This represents the time required to establish "
-    "the participant's simulation levels that elicit the target levels of torque. " 
-    "To be determined on a per-muscle basis following pilot data collection informed by clinical insights."
-)
+# Filter out zero

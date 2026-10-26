@@ -112,3 +112,16 @@ fig = go.Figure(data=[go.Pie(
 )])
 
 fig.update_layout(
+    title_text="Per-Session Time Allocation Breakdown (Minutes)",
+    annotations=[dict(text='Mins', x=0.5, y=0.5, font_size=20, showarrow=False)],
+    showlegend=True
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+# Explanation Note Under Pie Chart
+st.markdown("---")
+st.markdown(
+    "💡 **Note on Calibration Time:** This represents the time required to establish "
+    "the participant's simulation levels that elicit the target levels of torque."
+)

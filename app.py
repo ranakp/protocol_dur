@@ -13,14 +13,13 @@ stim_levels = st.sidebar.slider("Number of Stimulation Intensities to Test", min
 positions = st.sidebar.slider("Number of Isometric Joint Positions", min_value=1, max_value=3, value=3, step=1)
 velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_value=0, max_value=3, value=2, step=1)
 
-reps = st.sidebar.slider("Repetitions (per stimulation intensity)", min_value=1, max_value=3, value=2, step=1)
+reps = st.sidebar.slider("Repetitions / Williams Sequences (per condition)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (seconds)", min_value=1, max_value=10, value=3, step=1)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=30, step=5)
 rest_between_blocks = st.sidebar.slider("Rest Between Major Blocks / Conditions (minutes)", min_value=1, max_value=5, value=2, step=1)
 
 calibration_time = st.sidebar.slider("Calibration Time (per muscle, minutes)", min_value=0, max_value=45, value=15, step=5)
 total_calibration_time = calibration_time * muscles_num
-#Biodexsetup_time = (positions + velocities) * 1
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:
@@ -33,18 +32,19 @@ else:
 active_velocities = velocities if velocities > 0 else 0
 total_condition_states = positions + active_velocities
 
-# Total trials: Muscles x Joint States x Williams Stim Levels x Reps per stim
+# Total trials: Muscles x Joint States x Williams Stim Levels x Reps
 total_trials = muscles_num * total_condition_states * stim_levels * reps
 total_trials_persesh = total_trials / number_of_sessions
 
 # Total trial active time (seconds)
 total_active_seconds = total_trials * trial_duration
 
-# Total rep-to-rep rest (within the same stimulation block)
-#total_block_count = muscles_num * total_condition_states * stim_levels
-# Total major blocks = Muscles x Joint States x Reps (each rep acts as a full Williams sequence block)
+# Total major blocks (Each rep acts as a complete Williams sequence block per joint state)
 total_block_count = muscles_num * total_condition_states * reps
-total_rep_breaks_all = total_block_count * (reps - 1) if reps > 1 else 0
+
+# Inter-trial rest occurs between individual stimulations within the sequences
+# Total individual trials minus the number of block beginnings = total internal rep breaks
+total_rep_breaks_all = total_trials - total_block_count
 total_trial_rest_seconds = total_rep_breaks_all * rest_between_trials
 
 # Total major block/condition transitions requiring longer rest (minutes)
@@ -56,9 +56,7 @@ active_mins = total_active_seconds / 60
 trial_rest_mins = total_trial_rest_seconds / 60
 block_rest_mins = total_block_rest_minutes
 
-#total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins + Biodexsetup_time
-total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins 
-
+total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + block_rest_mins
 total_experiment_time_persesh = total_experiment_time / number_of_sessions
 
 # Display Metrics
@@ -69,9 +67,9 @@ st.metric(label="Total Number of Stimulations Administered Per Session", value=f
 # Block Breakdown Explanations
 st.subheader("📋 Experimental Block Hierarchy")
 st.markdown(f"""
-* **Joint/Condition Blocks:** **{total_condition_states}** total blocks ({positions} isometric positions + {active_velocities} active isokinetic velocities tested independently).
-* **Williams Design Blocks (Stimulation Intensities):** **{stim_levels}** randomized intensity blocks administered per joint configuration.
-* **Total Major Transition Blocks:** **{total_block_count}** total blocks across the session (Joint States × Williams Intensity Blocks), requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
+* **Joint/Condition Blocks:** **{total_condition_states}** total joint configurations ({positions} isometric positions + {active_velocities} active isokinetic velocities).
+* **Williams Design Sequences:** **{stim_levels}** stimulation intensities randomized per sequence, repeated for **{reps}** complete block sets.
+* **Total Major Blocks:** **{total_block_count}** total major blocks across the session, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
 """)
 
 # Data for the interactive breakdown chart
@@ -103,5 +101,5 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 st.markdown(
     "💡 **Note on Calibration Time:** This represents the time required to establish "
-    "the participant's simulation levels that elicit the target levels of torque. Biodex set-up time was assumed to be accounted for in the rest times."
+    "the participant's simulation levels that elicit the target levels of torque."
 )

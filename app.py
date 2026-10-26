@@ -17,7 +17,9 @@ reps = st.sidebar.slider("Repetitions (per stimulation intensity)", min_value=1,
 trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
 rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
-setup_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=30, step=5)
+calibration_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=20, step=5)
+total_calibration_time = calibration_time*muscles_num;
+Biodexsetup_time = (positions + velocities)*2;
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:
@@ -47,9 +49,9 @@ total_condition_breaks = stim_levels - 1 if stim_levels > 1 else 0
 active_mins = total_active_seconds / 60
 trial_rest_mins = total_trial_rest_seconds / 60
 #condition_rest_mins = total_condition_rest_minutes
-#total_experiment_time = setup_time + active_mins + trial_rest_mins + condition_rest_mins
-total_experiment_time = setup_time + active_mins + trial_rest_mins 
-
+#total_experiment_time = calibration_time + active_mins + trial_rest_mins + condition_rest_mins
+total_experiment_time = total_calibration_time + active_mins + trial_rest_mins + Biodexsetup_time;
+total_experiment_time_persesh = total_experiment_time /number_of_sessions;
 
 # Display Metrics
 st.subheader("⏱️ Total Estimated Time")
@@ -58,8 +60,8 @@ st.metric(label="Total Number of Stimulations Administered Per Session", value =
 
 # Data for the interactive breakdown chart
 labels = ['Prep Time', 'Active Trial Time', 'Rest Between Trials']
-#values = [setup_time, active_mins, trial_rest_mins, condition_rest_mins]
-values = [setup_time, active_mins, trial_rest_mins]
+#values = [calibration_time, active_mins, trial_rest_mins, condition_rest_mins]
+values = [calibration_time, active_mins, trial_rest_mins]
 
 
 # Filter out zero values to keep the chart clean

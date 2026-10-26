@@ -17,7 +17,7 @@ reps = st.sidebar.slider("Repetitions (per condition)", min_value=1, max_value=3
 trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
 rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
-setup_time = st.sidebar.slider("Initial Setup/Prep Time (minutes)", min_value=0, max_value=30, value=15, step=5)
+setup_time = st.sidebar.slider("Initial Familiarization Time (minutes)", min_value=0, max_value=45, value=20, step=5)
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:

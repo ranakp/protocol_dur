@@ -39,6 +39,7 @@ total_experiment_time = setup_time + active_mins + trial_rest_mins + condition_r
 # Display Metrics
 st.subheader("⏱️ Total Estimated Time")
 st.metric(label="Total Duration", value=f"{total_experiment_time:.1f} minutes")
+st.metric(label="Number of Stimulations", value = f"{total_trials:.0f}") 
 
 # Data for the interactive breakdown chart
 labels = ['Initial Setup', 'Active Trial Time', 'Rest Between Trials', 'Rest Between Conditions']

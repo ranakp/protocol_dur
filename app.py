@@ -85,7 +85,8 @@ st.subheader("📋 Experimental Block Hierarchy")
 st.markdown(f"""
 * **Joint/Condition Blocks:** **{total_condition_states}** total joint configurations ({positions} isometric positions + {active_velocities} active isokinetic velocities).
 * **Williams Design Sequences:** **{stim_levels}** stimulation intensities randomized per sequence, repeated for **{reps}** complete block sets.
-* **Total Major Blocks in a Session:** **{total_block_count_persesh:.1f}** (product of: number of muscles (**{muscles_num}**), joint state configurations (**{positions}** isometric positions, **{velocities}** isokinetic), and repetitions (**{reps}**)) total major blocks across the session, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
+* **Total Major Blocks in a Session:** **{total_block_count_persesh:.1f}** (Total block count is a product of: number of muscles (**{muscles_num}**), repetitions (**{reps}**), and
+joint state configurations (**{positions}** isometric positions + **{velocities}** isokinetic) ) total major blocks across the session, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
 """)
 
 # --- Per-Session Data for the Interactive Breakdown Chart ---

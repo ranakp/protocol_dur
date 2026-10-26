@@ -94,3 +94,10 @@ fig.update_layout(
 )
 
 st.plotly_chart(fig, use_container_width=True)
+
+# Explanation Note Under Pie Chart
+st.markdown("---")
+st.markdown(
+    "💡 **Note on Calibration Time:** This represents the time required to establish "
+    "the participant's simulation levels that elicit the target levels of torque."
+)

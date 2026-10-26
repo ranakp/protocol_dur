@@ -95,4 +95,31 @@ values = [
     block_rest_mins / number_of_sessions
 ]
 
-# Filter out zero
+# Filter out zero values to keep the chart clean
+filtered_labels = [l for l, v in zip(labels, values) if v > 0]
+filtered_values = [v for v in values if v > 0]
+
+# Build Plotly Chart with clean rounding and minimized margins
+fig = go.Figure(data=[go.Pie(
+    labels=filtered_labels,
+    values=filtered_values,
+    hole=.4,
+    texttemplate="%{value:.1f}m<br>%{percent}",
+    hovertemplate="%{label}: %{value:.1f} mins<extra></extra>"
+)])
+
+fig.update_layout(
+    title_text="Per-Session Time Allocation Breakdown (Minutes)",
+    annotations=[dict(text='Mins', x=0.5, y=0.5, font_size=20, showarrow=False)],
+    showlegend=True,
+    margin=dict(t=40, b=10, l=10, r=10)
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+# Explanation Note Under Pie Chart
+st.markdown(
+    "💡 **Note on Calibration Time:** This represents the time required to establish "
+    "the participant's simulation levels that elicit the target levels of torque. " 
+    "To be determined on a per-muscle basis following pilot data collection informed by clinical insights."
+)

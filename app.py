@@ -13,11 +13,11 @@ stim_levels = st.sidebar.slider("Number of Stimulation Intensities to Test", min
 positions = st.sidebar.slider("Number of Isometric Joint Positions", min_value=1, max_value=3, value=3, step=1)
 velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_value=0, max_value=2, value=2, step=1)
 
-reps = st.sidebar.slider("Repetitions (per condition)", min_value=1, max_value=3, value=2, step=1)
+reps = st.sidebar.slider("Repetitions (per stimulation intensity)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
 rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
-setup_time = st.sidebar.slider("Initial Familiarization Time (minutes)", min_value=0, max_value=45, value=20, step=5)
+setup_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=30, step=5)
 
 # Conditional Slider for Number of Sessions
 if muscles_num > 1:
@@ -57,7 +57,7 @@ st.metric(label="Total Duration", value=f"{total_experiment_time:.1f} minutes")
 st.metric(label="Total Number of Stimulations Administered Per Session", value = f"{total_trials_persesh:.0f}") 
 
 # Data for the interactive breakdown chart
-labels = ['Initial Setup', 'Active Trial Time', 'Rest Between Trials']
+labels = ['Prep Time', 'Active Trial Time', 'Rest Between Trials']
 #values = [setup_time, active_mins, trial_rest_mins, condition_rest_mins]
 values = [setup_time, active_mins, trial_rest_mins]
 

@@ -62,6 +62,14 @@ st.subheader("⏱️ Total Estimated Time")
 st.metric(label="Experiment Duration Per Session", value=f"{total_experiment_time_persesh:.1f} minutes")
 st.metric(label="Total Number of Stimulations Administered Per Session", value=f"{total_trials_persesh:.0f}") 
 
+# Block Breakdown Explanations
+st.subheader("📋 Experimental Block Hierarchy")
+st.markdown(f"""
+* **Joint/Condition Blocks:** **{total_condition_states}** total blocks ({positions} isometric positions + {active_velocities} active isokinetic velocities tested independently).
+* **Williams Design Blocks (Stimulation Intensities):** **{stim_levels}** randomized intensity blocks administered per joint configuration.
+* **Total Major Transition Blocks:** **{total_block_count}** total blocks across the session (Joint States × Williams Intensity Blocks), requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
+""")
+
 # Data for the interactive breakdown chart
 labels = ['Calibration Time', 'Active Trial Time', 'Rep Rest (Intra-Block)', 'Block Rest (Inter-Block)', 'Biodex Setup']
 values = [total_calibration_time, active_mins, trial_rest_mins, block_rest_mins, Biodexsetup_time]

@@ -15,7 +15,7 @@ velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_valu
 
 reps = st.sidebar.slider("Repetitions / Williams Sequences (per condition)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (seconds)", min_value=1, max_value=10, value=3, step=1)
-rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=30, step=5)
+rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds) [Inter-Rep]", min_value=20, max_value=60, value=20, step=5)
 
 # Updated rest between blocks slider with optimized default and finer increments
 rest_between_blocks = st.sidebar.slider("Rest Between Major Blocks / Conditions (minutes)", min_value=0.5, max_value=5.0, value=1.0, step=0.5)
@@ -124,5 +124,6 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 st.markdown(
     "💡 **Note on Calibration Time:** This represents the time required to establish "
-    "the participant's simulation levels that elicit the target levels of torque."
+    "the participant's simulation levels that elicit the target levels of torque. 
+    To be determined on a per-muscle basis following pilot data collection informed by clinical insights."
 )

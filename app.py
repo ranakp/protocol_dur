@@ -57,8 +57,10 @@ st.metric(label="Total Duration", value=f"{total_experiment_time:.1f} minutes")
 st.metric(label="Total Number of Stimulations Administered Per Session", value = f"{total_trials_persesh:.0f}") 
 
 # Data for the interactive breakdown chart
-labels = ['Initial Setup', 'Active Trial Time', 'Rest Between Trials', 'Rest Between stim_levels']
-values = [setup_time, active_mins, trial_rest_mins, condition_rest_mins]
+labels = ['Initial Setup', 'Active Trial Time', 'Rest Between Trials']
+#values = [setup_time, active_mins, trial_rest_mins, condition_rest_mins]
+values = [setup_time, active_mins, trial_rest_mins]
+
 
 # Filter out zero values to keep the chart clean
 filtered_labels = [l for l, v in zip(labels, values) if v > 0]

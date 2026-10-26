@@ -8,11 +8,11 @@ st.write("Adjust the parameters below to see how they impact total experiment ti
 
 # Sidebar Controls for User Input
 st.sidebar.header("Experimental Parameters")
-conditions = st.sidebar.slider("Number of Conditions", min_value=1, max_value=10, value=3, step=1)
-reps = st.sidebar.slider("Repetitions (per condition)", min_value=1, max_value=20, value=5, step=1)
-trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=300, value=30, step=5)
-rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=0, max_value=600, value=60, step=5)
-rest_between_conditions = st.sidebar.slider("Rest Between Conditions (minutes)", min_value=0, max_value=30, value=5, step=1)
+conditions = st.sidebar.slider("Number of Conditions", min_value=2, max_value=5, value=3, step=1)
+reps = st.sidebar.slider("Repetitions (per condition)", min_value=1, max_value=3, value=2, step=1)
+trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
+rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=30, max_value=60, value=30, step=5)
+rest_between_conditions = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
 setup_time = st.sidebar.slider("Initial Setup/Prep Time (minutes)", min_value=0, max_value=60, value=15, step=5)
 
 # Timeline Calculations

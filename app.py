@@ -14,9 +14,9 @@ positions = st.sidebar.slider("Number of Isometric Joint Positions", min_value=1
 velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_value=0, max_value=3, value=2, step=1)
 
 reps = st.sidebar.slider("Repetitions (per stimulation intensity)", min_value=1, max_value=3, value=2, step=1)
-trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
+trial_duration = st.sidebar.slider("Trial (Stimulation Delivery) Duration (seconds)", min_value=1, max_value=10, value=3, step=1)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
-rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
+#rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
 calibration_time = st.sidebar.slider("Level Tuning & Prep Time (minutes)", min_value=0, max_value=45, value=20, step=5)
 total_calibration_time = calibration_time*muscles_num;
 Biodexsetup_time = (positions + velocities)*2;
@@ -38,8 +38,8 @@ total_active_seconds = total_trials * trial_duration
 
 # Total rest between trials (seconds)
 # Within a condition, rest occurs between reps. Total breaks = stim_levels * (reps - 1)
-total_trial_breaks = stim_levels * (reps - 1) if reps > 1 else 0
-total_trial_rest_seconds = total_trial_breaks * rest_between_trials
+#total_trial_breaks = stim_levels * (reps - 1) if reps > 1 else 0
+#total_trial_rest_seconds = total_trial_breaks * rest_between_trials
 
 # Total rest between stim_levels (minutes)
 total_condition_breaks = stim_levels - 1 if stim_levels > 1 else 0
@@ -55,7 +55,7 @@ total_experiment_time_persesh = total_experiment_time /number_of_sessions;
 
 # Display Metrics
 st.subheader("⏱️ Total Estimated Time")
-st.metric(label="Total Duration", value=f"{total_experiment_time:.1f} minutes")
+st.metric(label="Experiment Duration Per Session", value=f"{total_experiment_time_persesh :.1f} minutes")
 st.metric(label="Total Number of Stimulations Administered Per Session", value = f"{total_trials_persesh:.0f}") 
 
 # Data for the interactive breakdown chart

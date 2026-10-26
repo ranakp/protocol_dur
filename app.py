@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 
 # Page Configuration
 st.set_page_config(page_title="Experiment Timeline Calculator", layout="centered")
-st.title("🔬 Experiment Duration Calculator")
+st.title("🔬 FES-Torque Experiment Duration Calculator")
 st.write("Adjust the parameters below to see how they impact total experiment time.")
 
 # Sidebar Controls for User Input

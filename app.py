@@ -40,8 +40,9 @@ total_trials_persesh = total_trials / number_of_sessions
 total_active_seconds = total_trials * trial_duration
 
 # Total major blocks (Each rep acts as a complete Williams sequence block per joint state)
-total_block_count = muscles_num * total_condition_states * reps
+total_block_count = muscles_num * total_condition_states * reps 
 total_block_count_persesh  = total_block_count/ number_of_sessions;
+#stims_per_block = stim_levels
 
 # Inter-trial rest occurs between individual stimulations within the sequences
 total_rep_breaks_all = total_trials - total_block_count
@@ -74,7 +75,8 @@ st.subheader("📋 Experimental Block Hierarchy")
 st.markdown(f"""
 * **Joint/Condition Blocks:** **{total_condition_states}** total joint configurations ({positions} isometric positions + {active_velocities} active isokinetic velocities).
 * **Williams Design Sequences:** **{stim_levels}** stimulation intensities randomized per sequence, repeated for **{reps}** complete block sets.
-* **Total Major Blocks in a Session:** **{total_block_count_persesh}** (product of: number of muscles, joint state configurations, and repetitions) total major blocks across the study, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
+* **Total Major Blocks in a Session:** **{total_block_count_persesh}** (product of: number of muscles (**{muscles_num}**), joint state configurations (**{positions}** isometric positions, "
+"**{velocities}** isokinetic ), and repetitions (**{reps}**)) total major blocks across the study, requiring **{total_major_block_transitions}** inter-block rest breaks of {rest_between_blocks} minutes each.
 """)
 
 # --- Per-Session Data for the Interactive Breakdown Chart ---

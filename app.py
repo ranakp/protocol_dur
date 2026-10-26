@@ -11,16 +11,25 @@ st.sidebar.header("Experimental Parameters")
 muscles_num = st.sidebar.slider("Number of Muscles to Test", min_value=1, max_value=4, value=4, step=1)
 stim_levels = st.sidebar.slider("Number of Stimulation Intensities to Test", min_value=2, max_value=5, value=3, step=1)
 positions = st.sidebar.slider("Number of Isometric Joint Positions", min_value=1, max_value=3, value=3, step=1)
-velocities = st.sidebar.slider("Number of Isometric Joint Positions", min_value=0, max_value=2, value=2, step=1)
+velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_value=0, max_value=2, value=2, step=1)
 
 reps = st.sidebar.slider("Repetitions (per condition)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
-rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=30, max_value=60, value=30, step=5)
+rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
 rest_between_stim_levels = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
-setup_time = st.sidebar.slider("Initial Setup/Prep Time (minutes)", min_value=0, max_value=60, value=15, step=5)
+setup_time = st.sidebar.slider("Initial Setup/Prep Time (minutes)", min_value=0, max_value=30, value=15, step=5)
+
+# Conditional Slider for Number of Sessions
+if muscles_num > 1:
+    number_of_sessions = st.sidebar.slider("Number of test sessions", min_value=1, max_value=2, value=2, step=1)
+else:
+    number_of_sessions = 1
+    st.sidebar.info("Number of test sessions fixed to 1 because only 1 muscle is selected.")
+
 
 # Timeline Calculations
 total_trials = muscles_num * stim_levels * reps * ( positions + velocities)
+total_trials_persesh = total_trials/number_of_sessions;
 
 # Total trial active time (seconds)
 total_active_seconds = total_trials * trial_duration
@@ -43,7 +52,7 @@ total_experiment_time = setup_time + active_mins + trial_rest_mins + condition_r
 # Display Metrics
 st.subheader("⏱️ Total Estimated Time")
 st.metric(label="Total Duration", value=f"{total_experiment_time:.1f} minutes")
-st.metric(label="Number of Stimulations", value = f"{total_trials:.0f}") 
+st.metric(label="Total Number of Stimulations Administered Per Session", value = f"{total_trials_persesh:.0f}") 
 
 # Data for the interactive breakdown chart
 labels = ['Initial Setup', 'Active Trial Time', 'Rest Between Trials', 'Rest Between stim_levels']

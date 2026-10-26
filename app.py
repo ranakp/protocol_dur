@@ -124,6 +124,6 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("---")
 st.markdown(
     "💡 **Note on Calibration Time:** This represents the time required to establish "
-    "the participant's simulation levels that elicit the target levels of torque. 
-    To be determined on a per-muscle basis following pilot data collection informed by clinical insights."
+    "the participant's simulation levels that elicit the target levels of torque." 
+    "To be determined on a per-muscle basis following pilot data collection informed by clinical insights."
 )

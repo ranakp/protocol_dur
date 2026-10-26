@@ -30,7 +30,6 @@ else:
     st.sidebar.info("Number of test sessions fixed to 1 because only 1 muscle is selected.")
 
 # Timeline Calculations
-# Total independent condition states (positions + velocities evaluated independently)
 active_velocities = velocities if velocities > 0 else 0
 total_condition_states = positions + active_velocities
 
@@ -42,9 +41,6 @@ total_trials_persesh = total_trials / number_of_sessions
 total_active_seconds = total_trials * trial_duration
 
 # Total rep-to-rep rest (within the same stimulation block)
-# Inside each stim block, there are (reps - 1) rest breaks.
-total_reps_per_condition_block = stim_levels * reps
-total_rep_breaks_per_block = stim_levels * (reps - 1) if reps > 1 else 0
 total_block_count = muscles_num * total_condition_states * stim_levels
 total_rep_breaks_all = total_block_count * (reps - 1) if reps > 1 else 0
 total_trial_rest_seconds = total_rep_breaks_all * rest_between_trials

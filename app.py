@@ -16,7 +16,7 @@ velocities = st.sidebar.slider("Number of Isokinetic Joint Velocities", min_valu
 reps = st.sidebar.slider("Repetitions (per condition)", min_value=1, max_value=3, value=2, step=1)
 trial_duration = st.sidebar.slider("Trial Duration (seconds)", min_value=1, max_value=10, value=5, step=2)
 rest_between_trials = st.sidebar.slider("Rest Between Trials (seconds)", min_value=20, max_value=60, value=30, step=5)
-rest_between_stim_levels = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
+rest_between_stim_level = st.sidebar.slider("Rest Between blocks (minutes)", min_value=0, max_value=5, value=2, step=1)
 setup_time = st.sidebar.slider("Initial Setup/Prep Time (minutes)", min_value=0, max_value=30, value=15, step=5)
 
 # Conditional Slider for Number of Sessions
@@ -41,13 +41,15 @@ total_trial_rest_seconds = total_trial_breaks * rest_between_trials
 
 # Total rest between stim_levels (minutes)
 total_condition_breaks = stim_levels - 1 if stim_levels > 1 else 0
-total_condition_rest_minutes = total_condition_breaks * rest_between_stim_levels
+#total_condition_rest_minutes = total_condition_breaks * rest_between_stim_levels
 
 # Convert everything to minutes
 active_mins = total_active_seconds / 60
 trial_rest_mins = total_trial_rest_seconds / 60
-condition_rest_mins = total_condition_rest_minutes
-total_experiment_time = setup_time + active_mins + trial_rest_mins + condition_rest_mins
+#condition_rest_mins = total_condition_rest_minutes
+#total_experiment_time = setup_time + active_mins + trial_rest_mins + condition_rest_mins
+total_experiment_time = setup_time + active_mins + trial_rest_mins 
+
 
 # Display Metrics
 st.subheader("⏱️ Total Estimated Time")
